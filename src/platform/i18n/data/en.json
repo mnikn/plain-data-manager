@@ -1,0 +1,21 @@
+{
+    "project": "Project",
+    "project:new": "New Project",
+    "project:load": "Load project",
+    "project:switch": "Switch project",
+    "project:setting": "Project setting",
+    "project:setting:name": "Name",
+    "project:setting:location": "Location",
+    "category": "Category",
+    "category:new": "New category",
+    "category:delete": "Delete category",
+    "category:setting": "Category setting",
+    "category:setting:id": "Category id",
+    "category:setting:id:validator-require": "Please input id",
+    "category:setting:name": "Category name",
+    "category:setting:name:validator-require": "Please input category ",
+    "edit": "Edit",
+    "edit:undo": "Undo",
+    "edit:redo": "Redo",
+    "no-data": "No data"
+}

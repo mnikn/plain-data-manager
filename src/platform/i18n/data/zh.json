@@ -1,0 +1,21 @@
+{
+    "project": "项目",
+    "project:new": "新建项目",
+    "project:load": "读取项目",
+    "project:switch": "切换项目",
+    "project:setting": "设置项目",
+    "project:setting:name": "名称",
+    "project:setting:location": "项目位置",
+    "category": "分类",
+    "category:new": "新建分类",
+    "category:delete": "删除分类",
+    "category:setting": "分类设置",
+    "category:setting:id": "分类id",
+    "category:setting:id:validator-require": "请输入id",
+    "category:setting:name": "分类名称",
+    "category:setting:name:validator-require": "请输入名称",
+    "edit": "编辑",
+    "edit:undo": "撤销",
+    "edit:redo": "重做",
+    "no-data": "空数据"
+}

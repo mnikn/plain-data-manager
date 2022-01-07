@@ -1,0 +1,32 @@
+{
+    "schema": {
+        "string": {
+            "default": "",
+            "typeConfig": {
+                "minCount": 0,
+                "maxCount": 20
+            }
+        },
+        "text": {
+            "default": "",
+            "typeConfig": {
+                "minCount": 0
+            }
+        },
+        "file": {
+            "default": null,
+            "typeConfig": {
+                "fileType": "pic"
+            }
+        },
+        "number": {
+            "default": 0
+        },
+        "range": {
+            "default": [0,100]
+        },
+        "bool": {
+            "default": false
+        }
+    }
+}
