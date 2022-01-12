@@ -1,5 +1,8 @@
 import { Button, Modal, Space } from "antd";
 import I18n from "../../platform/i18n";
+import { useEffect } from "react";
+import { ElectronEvent } from "platform/constants";
+const electron = (window as any).electron;
 
 const NewDataModal = ({
   visible,
@@ -11,8 +14,17 @@ const NewDataModal = ({
   showNewProject: () => void;
 }) => {
   const selectProject = () => {
-    (window as any).ipcRenderer.emit("show-dialog");
+    electron.ipcRenderer.send(ElectronEvent.ShowOpenDialog);
   };
+
+  useEffect(() => {
+    electron.ipcRenderer.on(
+      ElectronEvent.ReceiveOpenDialogData,
+      (_: any, data: any) => {
+        console.log("data: ", data);
+      }
+    );
+  }, []);
   return (
     <Modal
       visible={visible}

@@ -1,8 +1,10 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import installExtension, {
-    REACT_DEVELOPER_TOOLS
+  REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
 import * as path from "path";
+import ElectronEvent from "./event";
+const fs = require("fs");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -11,6 +13,8 @@ function createWindow() {
     webPreferences: {
       // contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
@@ -38,9 +42,18 @@ function createWindow() {
     });
   }
 
-  ipcMain.on("show-dialog", () => {
-    dialog.showSaveDialogSync(win, {
-    });
+  ipcMain.on(ElectronEvent.ShowOpenDialog, (event, config = {}) => {
+      const data = dialog.showOpenDialogSync(win, config);
+      let res: any = data;
+    if (Array.isArray(data)) {
+      res = data?.map((item: string) => {
+        // data: fs.readFileSync(item, "utf8")
+        return { path: item };
+      });
+    }
+    if (res) {
+      event.sender.send(ElectronEvent.ReceiveOpenDialogData, res);
+    }
   });
 }
 

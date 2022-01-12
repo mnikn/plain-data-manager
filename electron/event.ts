@@ -1,6 +1,5 @@
-export const THEME = "light";
-
-export enum ElectronEvent {
+enum ElectronEvent {
   ShowOpenDialog = "show-open-dialog",
   ReceiveOpenDialogData = "Receive-Open-Dialog-Data",
 }
+export default ElectronEvent;

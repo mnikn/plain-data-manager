@@ -1,6 +1,10 @@
-import { Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
+import Category from "models/category";
 import Project from "models/project";
+import { ElectronEvent } from "platform/constants";
 import I18n from "platform/i18n";
+import { useEffect } from "react";
+const electron = (window as any).electron;
 
 const ProjectEditModal = ({
   visible,
@@ -21,14 +25,27 @@ const ProjectEditModal = ({
         data.location = values.location;
         onSubmit(data);
         form.resetFields();
+        close();
       })
       .catch((info) => {
         console.log("err: ", info);
-      })
-      .finally(() => {
-        close();
       });
   };
+
+  const selectLocation = () => {
+    electron.ipcRenderer.send(ElectronEvent.ShowOpenDialog, {
+      properties: ["openDirectory"],
+    });
+  };
+
+  useEffect(() => {
+    const receiveData = (_: any, data: any[]) => {
+      form.setFieldsValue({
+        location: data[0]?.path || "",
+      });
+    };
+    electron.ipcRenderer.on(ElectronEvent.ReceiveOpenDialogData, receiveData);
+  }, []);
   return (
     <Modal
       visible={visible}
@@ -63,7 +80,11 @@ const ProjectEditModal = ({
             },
           ]}
         >
-          <Input />
+          <Input
+            type="button"
+            onClick={selectLocation}
+            style={{ textAlign: "left" }}
+          />
         </Form.Item>
       </Form>
     </Modal>
