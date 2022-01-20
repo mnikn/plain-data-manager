@@ -12,6 +12,8 @@ import NewDataModal from "./new_data";
 import Context from "./context";
 import HomeContent from "./content";
 import Event, { EventType } from "./event";
+import CategorySettingModal from "./category/setting";
+import FilePreviewModal from "./file/preview";
 
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -35,13 +37,19 @@ const StyleProjectInfo = styled.div`
 export default function Home() {
   const [project, setProject] = useState<Project>(new Project());
   const [currentCategory, setCurrentCategory] = useState<Category>(
-    new Category()
+    project.categories[0] || new Category()
   );
 
   const {
     visible: newCatrgoryVisible,
     show: showNewCatrgory,
     close: closeNewCatrgory,
+  } = useModal();
+
+  const {
+    visible: categorySettingModalVisible,
+    show: showCategorySettingModal,
+    close: closeCategorySettingModal,
   } = useModal();
   const {
     visible: projectEditVisible,
@@ -53,9 +61,20 @@ export default function Home() {
     show: showNewData,
     close: closeNewData,
   } = useModal();
+  const {
+    visible: filePreviewVisible,
+    show: showFilePreview,
+    close: closeFilePreview,
+  } = useModal();
 
   const onCategoryCreated = (category: Category) => {
     project.categories.push(category);
+    setCurrentCategory(category);
+  };
+  const onCategoryUpdate = (category: Category) => {
+    project.categories[
+      project.categories.findIndex((item) => item.id === category.id)
+    ] = category;
     setCurrentCategory(category);
   };
   const createProject = (data: Project) => {
@@ -72,9 +91,21 @@ export default function Home() {
   }, [project, showNewData, closeNewData]);
 
   useEffect(() => {
+    const UpdateCategoryData = (data: any) => {
+      setCurrentCategory((prev) => {
+        const currentCategory = new Category();
+        currentCategory.id = prev.id;
+        currentCategory.data = data;
+        currentCategory.name = prev.name;
+        currentCategory.schema = prev.schema;
+        return currentCategory;
+      });
+    };
     Event.on(EventType.CreateCategory, showNewCatrgory);
+    Event.on(EventType.UpdateCategoryData, UpdateCategoryData);
     return () => {
       Event.off(EventType.CreateCategory, showNewCatrgory);
+      Event.off(EventType.UpdateCategoryData, UpdateCategoryData);
     };
   }, [showNewCatrgory]);
 
@@ -87,6 +118,13 @@ export default function Home() {
     >
       <Layout style={{ minHeight: "100vh" }}>
         <Menu mode="horizontal">
+          <SubMenu key="file" title={I18n.t("file")}>
+            <Menu.Item key="file-preview" onClick={showFilePreview}>
+              {I18n.t("file:preview")}
+            </Menu.Item>
+            <Menu.Item key="file-import">{I18n.t("file:import")}</Menu.Item>
+            <Menu.Item key="file-export">{I18n.t("file:export")}</Menu.Item>
+          </SubMenu>
           <SubMenu key="project" title={I18n.t("project")}>
             <Menu.Item key="project-new" onClick={showProjectEdit}>
               {I18n.t("project:new")}
@@ -105,7 +143,10 @@ export default function Home() {
             <Menu.Item key="category-delete" disabled={!currentCategory.id}>
               {I18n.t("category:delete")}
             </Menu.Item>
-            <Menu.Item key="category-setting">
+            <Menu.Item
+              key="category-setting"
+              onClick={showCategorySettingModal}
+            >
               {I18n.t("category:setting")}
             </Menu.Item>
           </SubMenu>
@@ -135,6 +176,11 @@ export default function Home() {
           close={closeNewCatrgory}
           onCreate={onCategoryCreated}
         />
+        <CategorySettingModal
+          visible={categorySettingModalVisible}
+          onSubmit={onCategoryUpdate}
+          close={closeCategorySettingModal}
+        />
         <ProjectEditModal
           visible={projectEditVisible}
           close={closeProjectEdit}
@@ -146,6 +192,10 @@ export default function Home() {
           showNewProject={() => {
             showProjectEdit();
           }}
+        />
+        <FilePreviewModal
+          visible={filePreviewVisible}
+          close={closeFilePreview}
         />
       </Layout>
     </Context.Provider>

@@ -14,8 +14,16 @@
     "category:setting:id:validator-require": "请输入id",
     "category:setting:name": "分类名称",
     "category:setting:name:validator-require": "请输入名称",
+    "category:setting:schema": "Schema",
     "edit": "编辑",
     "edit:undo": "撤销",
     "edit:redo": "重做",
-    "no-data": "空数据"
+    "no-data": "空数据",
+
+    "file": "文件",
+    "file:preview": "预览",
+    "file:import": "导入",
+    "file:export": "导出",
+
+    "content:add_item": "添加数据"
 }
